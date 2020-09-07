@@ -1,0 +1,10 @@
+<?
+$PERM["forum"]["8"]="W";
+$PERM["forum"]["9"]="W";
+$PERM["blogs"]["8"]="W";
+$PERM["blogs"]["9"]="W";
+$PERM["news"]["8"]="W";
+$PERM["news"]["9"]="W";
+$PERM["index.php"]["8"]="W";
+$PERM["index.php"]["9"]="W";
+?>
