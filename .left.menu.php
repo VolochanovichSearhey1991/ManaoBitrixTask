@@ -1,8 +1,8 @@
 <?
 $aMenuLinks = Array(
 	Array(
-		"добавить новость", 
-		"/dobavlenie-elementa-infobloka/", 
+		"каталог", 
+		"/products/", 
 		Array(), 
 		Array(), 
 		"" 
