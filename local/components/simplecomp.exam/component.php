@@ -1,57 +1,53 @@
 <?
     if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-     
-    $i = 0;
-    $arFilter = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID']];
-    $arSelect = ['IBLOCK_ID','ID','NAME','UF_NEWS_LINK'];
-    $resProd = CIBlockSection::GetList(['sort' => 'asc'], $arFilter, false, $arSelect);
+    if ($this->StartResultCache()) {
 
-     while ($groupsData = $resProd->Fetch()) {
+        $countElems = 0;
+        $arFilterNews = ['IBLOCK_ID' => $arParams['NEWS_IBLOCK_ID']];
+        $arSelectNews = ['IBLOCK_ID', 'ID', 'NAME', 'DATE_ACTIVE_FROM'];
+        $resNews = CIBlockElement::GetList([], $arFilterNews, false, false, $arSelectNews);
 
-        $arGroupsData[] = $groupsData;
+        if (!$resNews) {
+            $this->AbortResultCache();
+        }
 
-         foreach ($groupsData['UF_NEWS_LINK'] as $newsId) {
+        while ($newsData = $resNews->Fetch()) {
+            $arFilterDir = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'ACTIVE' => 'Y', 'UF_NEWS_LINK' => $newsData['ID']];
+            $arSelectDir = ['IBLOCK_ID', 'ID', 'NAME', 'UF_NEWS_LINK'];
+            $resDir = CIBlockSection::GetList([], $arFilterDir, false, $arSelectDir);
 
-            $arFilterNews = ['IBLOCK_ID' => $arParams['NEWS_IBLOCK_ID'], 'ID' => $newsId];
-            $arSelectNews = ['IBLOCK_ID','ID','NAME'];
-            $resNews = CIBlockElement::GetList(['sort' => 'asc'], $arFilterNews, false, false, $arSelectNews);
+            if (!$resDir) {
+                $this->AbortResultCache();
+            }
 
-            if ($newsData = $resNews->Fetch()) {
+            while ($dirData = $resDir->Fetch()) {
+                $arFilterElem = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'ACTIVE' => 'Y', 'SECTION_ID' => $dirData['ID']];
+                $arSelectElem = ['IBLOCK_ID', 'ID', 'NAME', 'PROPERTY_PRICE', 'PROPERTY_MATERIAL', 'PROPERTY_ARTNUMBER'];
+                $resElem = CIBlockElement::GetList([], $arFilterElem, false, false, $arSelectElem);
 
-                $arGroupsData[$i] = [$newsData['NAME'], $groupsData['NAME']];
-
-                $arFilterElems = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'SECTION_ID' => $groupsData['ID']];
-                $arSelectElems = ['IBLOCK_ID','ID','NAME'];
-                $resElems = CIBlockElement::GetList(['sort' => 'asc'], $arFilterElems, false, false, $arSelectElems);
-
-                while ($elemsData = $resElems->Fetch()) {
-                    $buf[] = $elemsData['NAME'];
+                if (!$resElem) {
+                    $this->AbortResultCache();
                 }
-                
-                $arGroupsData[$i][2] = $buf;
-                $arGroupsData[$i][3] = $groupsData['ID'];
-                $buf = [];
-                $i++;
-            } 
+
+                while ($elemData = $resElem->Fetch()) {
+                    $arElemData[] = $elemData;
+                    $countElems++;
+                }
+
+                $arDirData[] = [$dirData['ID'], $dirData['NAME'], $arElemData];
+                $arElemData = [];
+            }
+
             
-        }  
-        
-        
-        
-    } 
+                $arResult[$newsData['ID']] = [$newsData['NAME'], $newsData['DATE_ACTIVE_FROM'], $arDirData];
+                $arDirData = [];
+            
+            
+        }
 
-    /* while ($groupsData = $resProd->Fetch()) {
-
-       
-            $arGroupsData[] = $groupsData['UF_NEWS_LINK'];
-        
-
-        
-    } */
-
-   echo "<pre>";
-    print_r($arGroupsData);
-    echo '</pre>';
-
+        $this->IncludeComponentTemplate();
+    }
+    $APPLICATION->SetTitle($countElems);
+    
 ?>

@@ -88,20 +88,20 @@ $arUrlRewrite=array (
     'PATH' => '/personal/order/index.php',
     'SORT' => 100,
   ),
-  23 => 
-  array (
-    'CONDITION' => '#^/site3products/#',
-    'RULE' => '',
-    'ID' => 'bitrix:catalog',
-    'PATH' => '/site3products/index.php',
-    'SORT' => 100,
-  ),
   22 => 
   array (
     'CONDITION' => '#^/site3services/#',
     'RULE' => '',
     'ID' => 'bitrix:catalog',
     'PATH' => '/site3services/index.php',
+    'SORT' => 100,
+  ),
+  23 => 
+  array (
+    'CONDITION' => '#^/site3products/#',
+    'RULE' => '',
+    'ID' => 'bitrix:catalog',
+    'PATH' => '/site3products/index.php',
     'SORT' => 100,
   ),
   13 => 
