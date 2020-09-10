@@ -1,46 +1,38 @@
 <?
     if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
+
     $elemStr = '';
     $headStr = '';
     ?>
     <h3> Элементов - <? $APPLICATION->ShowTitle();?> </h3>
     <?
-    foreach ($arResult as $news) {
+    echo '<ul>';
 
+    foreach ($arResult as $news) {
         $headStr = '<b>' . $news['0'] . '</b> - ' . $news['1'] . ' (';
 
-        foreach ($news['2'] as $dirName) {
-            $headStr .= ' ' . $dirName[1];
+        foreach ($news['2'] as $dirData) {
+            $headStr .= ' ' . $dirData['NAME'];
 
-            foreach ($dirName[2] as $elemList) {
-
-                    $bufArr[] = [$elemList['NAME'], $elemList['PROPERTY_PRICE_VALUE'], $elemList['PROPERTY_MATERIAL_VALUE'], $elemList['PROPERTY_ARTNUMBER_VALUE']];
-
-            }
-        }
-        
-        ?>
-        <ul>
-            <li><?=$headStr . ') </br>';?></li>
-            <ul>
-        <?
-        foreach ($bufArr as $elem) {
-
-            foreach ($elem as $field) {
-                $elemStr .= $field . ' ';
+            foreach ($dirData['elems'] as $elem) {
+                $arElems[] = $elem;
             }
             
-            ?>
-            <li> <?=$elemStr?> </li>
-            <?
-            $elemStr = '';
-        }
-        
-        ?>
-        </ul>
-            </ul>
-        <?
-        $bufArr = [];
-    }  
 
+        }
+
+        $headStr .= ')';
+
+        echo '<li>' . $headStr . '</li>';
+            echo '<ul>';
+
+                foreach ($arElems as $elem) {
+                    echo '<li>' . $elem['NAME'] . ' - ' . $elem['PROPERTY_PRICE_VALUE'] . ' - ' . $elem['PROPERTY_MATERIAL_VALUE'] . ' - ' . $elem['PROPERTY_ARTNUMBER_VALUE'] . '</li>';
+                }
+                
+            echo '</ul>';
+            $arElems = [];
+    }
+
+    echo '</ul>';
 ?>
