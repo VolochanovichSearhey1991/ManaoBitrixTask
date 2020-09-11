@@ -1,4 +1,7 @@
 <?
+  \Bitrix\Main\Localization\Loc::loadLanguageFile(__FILE__, 'ru'); 
+  use  \Bitrix\Main\Localization\Loc;
+   
   $eventManager = \Bitrix\Main\EventManager::getInstance();
   $eventManager->addEventHandler("main", "OnBeforeEventAdd",array("LetterDataModifier","modifyLetterData"));
 
@@ -15,18 +18,17 @@
          $userLogin = $USER->GetLogin();
          $userName = $USER->GetFirstName();
   
-         $arFields["AUTHOR"] = "Пользователь авторизован: " .
-          $userId . " (" . $userLogin .") " . $userName . " данныеиз формы: " .
+         $arFields["AUTHOR"] = Loc::getMessage('USER_IS_AUTHORIZE') .
+          $userId . " (" . $userLogin .") " . $userName . " " . Loc::getMessage('FORM_DATA') . " " .
             $arFields["AUTHOR"];
   
-         $authorString = $arFields["AUTHOR"];
-         $letterDataModifier->addEventLogEntry($authorString);
        } else {
-         $arFields["AUTHOR"] = "Пользователь не авторизован, данные изформы: " . $arFields["AUTHOR"];
-         $authorString = $arFields["AUTHOR"];
-         $letterDataModifier->addEventLogEntry($authorString);
+         $arFields["AUTHOR"] = Loc::getMessage('USER_IS_NOT_AUTHORIZE') . " " . 
+            Loc::getMessage('FORM_DATA') . " " . $arFields["AUTHOR"];
        }
-  
+       
+       $authorString = $arFields["AUTHOR"];
+       $letterDataModifier->addEventLogEntry($authorString);
       }
   
      }
