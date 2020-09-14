@@ -10,7 +10,7 @@
         echo '<li>' . $classifier[0] . '</li>';
         echo '<ul>';
 
-        foreach ($classifier[1] as $element) {
+        foreach ($classifier['ELEMS'] as $element) {
             $elemData = $element['NAME'] . ' ' . $element['PROPERTY_PRICE_VALUE'] . 
                 ' ' . $element['PROPERTY_MATERIAL_VALUE'] . 
                     ' ' . $element['PROPERTY_ARTNUMBER_VALUE'];
