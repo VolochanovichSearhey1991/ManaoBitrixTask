@@ -8,7 +8,8 @@
       if(\CModule::IncludeModule("iblock")) {
         global $APPLICATION;
         $curPage = $APPLICATION->GetCurPage(false);
-        $arFilter = array("IBLOCK_ID" => "14", "NAME" => $curPage);
+        $Iblock_id = '14';
+        $arFilter = array("IBLOCK_ID" => $Iblock_id, "NAME" => $curPage);
         $arSelect = array("IBLOCK_ID", "ID", "PROPERTY_TITLE", "PROPERTY_DESCRIPTION");
         $result = \CIBlockElement::GetList(array(), $arFilter, false, false, $arSelect);
 
