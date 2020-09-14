@@ -11,7 +11,7 @@ $APPLICATION->SetTitle("Интернет-магазин \"Одежда\"");
 		"CATALOG_IBLOCK_ID" => "16",
 		"CLASSIFIER_IBLOCK_ID" => "19",
 		"DETAILED_LINK_TEMPLATE" => "/detailpage.php",
-		"DETAIL_URL" => "detailpage.php?ELEMENT_ID=#ID#",
+		"DETAIL_URL" => "catalog_exam/#SECTION_ID#/#ID#",
 		"PROPERTY_ID" => "FIRM"
 	)
 );?><br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

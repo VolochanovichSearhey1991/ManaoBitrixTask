@@ -15,7 +15,8 @@
 
             $arFilterEl = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'PROPERTY_FIRM.ID' => $arClassifiersId, 'CHECK_PERMISSIONS' => 'Y']; //чтобы не делать лишних запросов в цикле одним запросом получаю все товары у которых есть ...////привязки
             $arSelectEl = ['IBLOCK_ID', 'ID', 'NAME', 'PROPERTY_FIRM', 'PROPERTY_PRICE', 'PROPERTY_MATERIAL', 'PROPERTY_ARTNUMBER', 'DETAIL_PAGE_URL'];
-            $resEl = CIBlockElement::GetList([], $arFilterEl, false, false, $arSelectEl);
+            $arSortEl = ['name' => 'asc', 'sort' => 'asc'];
+            $resEl = CIBlockElement::GetList($arSortEl, $arFilterEl, false, false, $arSelectEl);
             $resEl->SetUrlTemplates($arParams["DETAIL_URL"], "", "");
             return $resEl;
 

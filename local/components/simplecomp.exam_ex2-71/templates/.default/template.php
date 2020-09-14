@@ -14,7 +14,7 @@
             $elemData = $element['NAME'] . ' ' . $element['PROPERTY_PRICE_VALUE'] . 
                 ' ' . $element['PROPERTY_MATERIAL_VALUE'] . 
                     ' ' . $element['PROPERTY_ARTNUMBER_VALUE'];
-            echo '<li>' . $elemData . " <a href='" . $element['DETAIL_PAGE_URL'] . "'>смотреть детально</a> </li>";
+            echo '<li>' . $elemData . " <a href='" . $element['DETAIL_PAGE_URL'] . "'>" . $element['DETAIL_PAGE_URL'] . "</a> </li>";
         }
 
         echo '</ul>';
