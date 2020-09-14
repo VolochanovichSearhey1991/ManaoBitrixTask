@@ -10,6 +10,6 @@ $APPLICATION->SetTitle("Интернет-магазин \"Одежда\"");
 		"CACHE_TYPE" => "A",
 		"CATALOG_IBLOCK_ID" => "16",
 		"NEWS_IBLOCK_ID" => "15",
-		"UF_NEWS_LINK_ID" => "40"
+		"UF_NEWS_LINK_ID" => ""
 	)
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

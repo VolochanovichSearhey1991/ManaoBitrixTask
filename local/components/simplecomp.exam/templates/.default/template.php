@@ -11,7 +11,7 @@
     foreach ($arResult as $news) {
         $headStr = '<b>' . $news['0'] . '</b> - ' . $news['1'] . ' (';
 
-        foreach ($news['2'] as $dirData) {
+        foreach ($news['SECTIONS'] as $dirData) {
             $headStr .= ' ' . $dirData['NAME'];
 
             foreach ($dirData['elems'] as $elem) {
@@ -35,4 +35,5 @@
     }
 
     echo '</ul>';
+
 ?>
