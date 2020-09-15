@@ -97,6 +97,23 @@
 
         }
 
+        private function setAdditionalMenu($iblocId) {
+            GLOBAL $APPLICATION;
+            
+            if ($APPLICATION->GetShowIncludeAreas()) {
+            $this->AddIncludeAreaIcon(
+                [
+                    "ID" => "ibadmin",
+                    "TITLE" => "ИБ в админке",
+                    "URL" => "/bitrix/admin/iblock_list_admin.php?IBLOCK_ID=" . $iblocId . "&type=products", 
+                    "IN_PARAMS_MENU" => true, 
+                    "IN_MENU" => false 
+                ]
+            );
+            }
+
+        }
+
         public function executeComponent() {
             
             GLOBAL $USER; 
@@ -116,6 +133,7 @@
                 $this->IncludeComponentTemplate();
             }
 
+            $this->setAdditionalMenu($this->arParams['CATALOG_IBLOCK_ID']);
             $APPLICATION->SetTitle('Разделов: ' . $countElems);
     
         }
