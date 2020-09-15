@@ -23,14 +23,6 @@ $curPage = $APPLICATION->GetCurPage(true);
 </head>
 <body class="bx-background-image bx-theme-<?=$theme?>" <?$APPLICATION->ShowProperty("backgroundImage");?>>
 <div id="panel"><? $APPLICATION->ShowPanel(); ?></div>
-<?$APPLICATION->IncludeComponent("bitrix:eshop.banner", "", array(
-	
-	),
-	false,
-	array(
-	"ACTIVE_COMPONENT" => "N"
-	)
-);?>
 <div class="bx-wrapper" id="bx_eshop_wrap">
 	<header class="bx-header">
 		<div class="bx-header-section container">
@@ -154,6 +146,13 @@ $curPage = $APPLICATION->GetCurPage(true);
 			<!--endregion-->
 
 			<!--region search.title -->
+			<div class='leftPanel'>
+				<div style="color:red; margin: 34px 5px 35px 5px">
+					<?
+						$APPLICATION->ShowViewContent('minMaxPrice');
+					?>
+				</div>
+			</div>
 			<?if ($curPage != SITE_DIR."index.php"):?>
 				<div class="row mb-4">
 					<div class="col">

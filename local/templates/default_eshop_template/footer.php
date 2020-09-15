@@ -2,6 +2,7 @@
 				</div><!--end .bx-content -->
 
 				<!-- region Sidebar -->
+				
 				<?if (!$needSidebar):?>
 					<div class="sidebar col-md-3 col-sm-4">
 						<?$APPLICATION->IncludeComponent(

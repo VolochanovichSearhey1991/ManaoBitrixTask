@@ -1,3 +1,11 @@
+.leftPanel {
+	float:left; 
+	height:200px; 
+	width: 220px;
+	border: 1px solid black;
+	margin:0px;
+	padding: 0px;
+}
 .bx-yellow,
 .bx-theme-yellow {
 	--primary: #f9a91d;

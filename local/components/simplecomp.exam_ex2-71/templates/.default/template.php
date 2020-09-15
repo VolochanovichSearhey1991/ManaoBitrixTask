@@ -9,7 +9,13 @@
         <p> Каталог: <a href='http://980trainee.dev-bitrix.by'> 980trainee.dev-bitrix.by </a> </p> 
         <ul>";
     $i = 1;
-    foreach ($arResult as $classifier) {
+
+    foreach ($arResult as $key => $classifier) {
+
+        if ($key == 'minMax') {
+            continue;
+        }
+
         echo '<li>' . $classifier[0] . '</li>';
         echo '<ul>';
 
@@ -17,9 +23,11 @@
             $elemData = $element['NAME'] . ' ' . $element['PROPERTY_PRICE_VALUE'] . 
                 ' ' . $element['PROPERTY_MATERIAL_VALUE'] . 
                     ' ' . $element['PROPERTY_ARTNUMBER_VALUE'];
+
             $this->AddEditAction($element['ID'] . ++$i, $element['EDIT_LINK'], GetMessage('EDIT_ELEM'));
             $this->AddEditAction($element['ID'] . $i, $element['ADD_LINK'], GetMessage('ADD_ELEM'));
             $this->AddDeleteAction($element['ID']  . $i, $element['DELETE_LINK'], GetMessage('DEL_ELEM'), array("CONFIRM" => "Удалить?"));
+            
             echo "<li id=" . $this->GetEditAreaId($element['ID'] . $i) . ">" . $elemData . " <a href='" . $element['DETAIL_PAGE_URL'] . "'>" . $element['DETAIL_PAGE_URL'] . "</a> </li>";
         }
 

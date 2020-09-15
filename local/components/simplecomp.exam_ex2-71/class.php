@@ -77,6 +77,8 @@
                 $result[$bufAr['PROPERTY_FIRM_VALUE']]['ELEMS'][] = $bufAr;//id классификатора ключ массива, PROPERTY_FIRM_VALUE также содержит id классификатора, каждый товар попадет в нужный подмассив
             }
 
+            $result['minMax'] = $this->getMinMaxPrice($result);
+
             return $result;
 
         }
@@ -94,6 +96,33 @@
             }
 
             return $count;
+
+        }
+
+        private function getMinMaxPrice($result) {
+            
+            $minPrice = $result[array_key_first($result)]['ELEMS'][0]['PROPERTY_PRICE_VALUE'];
+            $maxPrice = 0;
+
+            foreach($result as $classifier) {
+
+                foreach ($classifier['ELEMS'] as $elem) {
+
+                    if ($elem['PROPERTY_PRICE_VALUE'] > $maxPrice) {
+                        $maxPrice = $elem['PROPERTY_PRICE_VALUE'];
+                    }
+
+                    if ($elem['PROPERTY_PRICE_VALUE'] < $minPrice) {
+                        $minPrice = $elem['PROPERTY_PRICE_VALUE'];
+                    }
+
+                }
+
+                $minMaxPrice = ['min' => $minPrice, 'max' => $maxPrice];
+
+            }
+
+            return $minMaxPrice;
 
         }
 
@@ -131,12 +160,16 @@
                 $this->arResult = $this->getArResult($filter);
                 $countElems = $this->getCountElems($this->arResult);
                 $this->IncludeComponentTemplate();
+                //echo '<pre>'; print_r($this->arResult); echo '</pre>'; 
+                
             }
 
             $this->setAdditionalMenu($this->arParams['CATALOG_IBLOCK_ID']);
             $APPLICATION->SetTitle('Разделов: ' . $countElems);
-    
+            
         }
+        
+        
 
     }
 ?>
