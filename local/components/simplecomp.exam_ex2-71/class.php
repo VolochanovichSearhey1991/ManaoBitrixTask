@@ -1,6 +1,4 @@
 <?
-    use Bitrix\Main\Application;
-    use Bitrix\Main\Web\Uri;
     use Bitrix\Main\Context;
 
     if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
@@ -14,10 +12,7 @@
             return $resCl;
 
         }
-        /* ['LOGIC' => 'OR', 
-                ['<=PROPERTY_PRICE' => '1700', '=PROPERTY_MATERIAL' => 'Дерево, ткань'],
-                ['<PROPERTY_PRICE' => '1500', '=PROPERTY_MATERIAL' => 'Металл, пластик']
-            ] */
+        
         private function getElemsList($arParams, $arClassifiersId, $additionalFilter = '') {
 
 
@@ -30,6 +25,20 @@
             $resEl = CIBlockElement::GetList($arSortEl, $arFilterEl, false, false, $arSelectEl);
             $resEl->SetUrlTemplates($arParams["DETAIL_URL"], "", "");
             return $resEl;
+
+        }
+
+        private function getEditLinks(&$arElem) {
+
+            $arButtons = CIBlock::GetPanelButtons(
+                $arElem["IBLOCK_ID"],
+                $arElem["ID"],
+                0,
+                array("SECTION_BUTTONS"=>false, "SESSID"=>false)
+            );
+            $arElem["ADD_LINK"] = $arButtons["edit"]["add_element"]["ACTION_URL"];
+            $arElem["EDIT_LINK"] = $arButtons["edit"]["edit_element"]["ACTION_URL"];
+            $arElem["DELETE_LINK"] = $arButtons["edit"]["delete_element"]["ACTION_URL"];
 
         }
 
@@ -64,6 +73,7 @@
         
             while ($elData = $resEl->GetNextElement()) {
                 $bufAr = $elData->GetFields();
+                $this->getEditLinks($bufAr);
                 $result[$bufAr['PROPERTY_FIRM_VALUE']]['ELEMS'][] = $bufAr;//id классификатора ключ массива, PROPERTY_FIRM_VALUE также содержит id классификатора, каждый товар попадет в нужный подмассив
             }
 
@@ -105,9 +115,9 @@
                 $countElems = $this->getCountElems($this->arResult);
                 $this->IncludeComponentTemplate();
             }
-            
-            $APPLICATION->SetTitle('Разделов: ' . $countElems);
 
+            $APPLICATION->SetTitle('Разделов: ' . $countElems);
+    
         }
 
     }
