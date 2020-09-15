@@ -1,4 +1,8 @@
 <?
+    use Bitrix\Main\Application;
+    use Bitrix\Main\Web\Uri;
+    use Bitrix\Main\Context;
+
     if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
     class CatalogCreator extends CBitrixComponent {
 
@@ -10,10 +14,17 @@
             return $resCl;
 
         }
+        /* ['LOGIC' => 'OR', 
+                ['<=PROPERTY_PRICE' => '1700', '=PROPERTY_MATERIAL' => 'Дерево, ткань'],
+                ['<PROPERTY_PRICE' => '1500', '=PROPERTY_MATERIAL' => 'Металл, пластик']
+            ] */
+        private function getElemsList($arParams, $arClassifiersId, $additionalFilter = '') {
 
-        private function getElemsList($arParams, $arClassifiersId) {
 
-            $arFilterEl = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'PROPERTY_FIRM.ID' => $arClassifiersId, 'CHECK_PERMISSIONS' => 'Y']; //чтобы не делать лишних запросов в цикле одним запросом получаю все товары у которых есть ...////привязки
+            $arFilterEl = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 
+            $additionalFilter, 
+            'PROPERTY_FIRM.ID' => $arClassifiersId, 
+            'CHECK_PERMISSIONS' => 'Y'];
             $arSelectEl = ['IBLOCK_ID', 'ID', 'NAME', 'PROPERTY_FIRM', 'PROPERTY_PRICE', 'PROPERTY_MATERIAL', 'PROPERTY_ARTNUMBER', 'DETAIL_PAGE_URL'];
             $arSortEl = ['name' => 'asc', 'sort' => 'asc'];
             $resEl = CIBlockElement::GetList($arSortEl, $arFilterEl, false, false, $arSelectEl);
@@ -22,7 +33,7 @@
 
         }
 
-        private function getArResult() {
+        private function getArResult($filter = null) {
             
             $resCl = $this->getClassificatorList($this->arParams);
                 
@@ -35,9 +46,18 @@
                 $result[$clData['ID']] = [$clData['NAME'], 'ELEMS' => []];
                 $count++;
             }
-        
-            $resEl = $this->getElemsList($this->arParams, $arClassifiersId);
-        
+
+            $additionalFilter = ['LOGIC' => 'OR', 
+            ['<=PROPERTY_PRICE' => '1700', '=PROPERTY_MATERIAL' => 'Дерево, ткань'],
+            ['<PROPERTY_PRICE' => '1500', '=PROPERTY_MATERIAL' => 'Металл, пластик']
+            ];
+
+            if (!empty($filter)) {
+                $resEl = $this->getElemsList($this->arParams, $arClassifiersId, $additionalFilter);
+            } else {
+                $resEl = $this->getElemsList($this->arParams, $arClassifiersId);
+            }
+            
             if (!$resEl) {
                 $this->AbortResultCache();
             }
@@ -68,17 +88,26 @@
         }
 
         public function executeComponent() {
+            
             GLOBAL $USER; 
             GLOBAL $APPLICATION;
 
-            if ($this->StartResultCache(false, $USER->GetGroups()) ) {
-                $this->arResult = $this->getArResult();
+            $request = Context::getCurrent()->getRequest();
+            $filter = $request->getQuery("F");
+
+            if ($this->StartResultCache(false, $USER->GetGroups() . $filter) ) {
+               
+                if (!empty($filter)) {
+                    $this->AbortResultCache();
+                }
+
+                $this->arResult = $this->getArResult($filter);
                 $countElems = $this->getCountElems($this->arResult);
                 $this->IncludeComponentTemplate();
             }
             
             $APPLICATION->SetTitle('Разделов: ' . $countElems);
-            
+
         }
 
     }

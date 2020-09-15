@@ -1,10 +1,13 @@
 <?
    if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-?>
-   <h3> <?=$APPLICATION->ShowTitle()?> </h3>
-   <p>Каталог: </p>
-   <ul>
-<?
+
+    echo '<h3>';
+    echo $APPLICATION->ShowTitle(); 
+    echo "
+        </h3> 
+        фильтр: <a href='http://980trainee.dev-bitrix.by/?F=Y'> 980trainee.dev-bitrix.by/?F=Y </a>
+        <p> Каталог: <a href='http://980trainee.dev-bitrix.by'> 980trainee.dev-bitrix.by </a> </p> 
+        <ul>";
 
     foreach ($arResult as $classifier) {
         echo '<li>' . $classifier[0] . '</li>';
