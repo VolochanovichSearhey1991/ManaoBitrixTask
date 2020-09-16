@@ -14,10 +14,7 @@
             return $resCl;
 
         }
-        /* ['LOGIC' => 'OR', 
-                ['<=PROPERTY_PRICE' => '1700', '=PROPERTY_MATERIAL' => 'Дерево, ткань'],
-                ['<PROPERTY_PRICE' => '1500', '=PROPERTY_MATERIAL' => 'Металл, пластик']
-            ] */
+        
         private function getElemsList($arParams, $arClassifiersId, $additionalFilter = '') {
 
 
@@ -96,11 +93,6 @@
             $filter = $request->getQuery("F");
 
             if ($this->StartResultCache(false, $USER->GetGroups() . $filter) ) {
-               
-                if (!empty($filter)) {
-                    $this->AbortResultCache();
-                }
-
                 $this->arResult = $this->getArResult($filter);
                 $countElems = $this->getCountElems($this->arResult);
                 $this->IncludeComponentTemplate();
