@@ -3,28 +3,28 @@
 
     class CatalogCreator extends CBitrixComponent {
 
-        private function getNewsList($arParams) {
+        private function getNewsList() {
 
-            $arFilterNews = ['IBLOCK_ID' => $arParams['NEWS_IBLOCK_ID']];
+            $arFilterNews = ['IBLOCK_ID' => $this->arParams['NEWS_IBLOCK_ID']];
             $arSelectNews = ['IBLOCK_ID', 'ID', 'NAME', 'DATE_ACTIVE_FROM'];
             $resNews = CIBlockElement::GetList([], $arFilterNews, false, false, $arSelectNews);
             return $resNews;
 
         }
 
-        private function getProductSections($arParams, $arNewsID) {
+        private function getProductSections($arNewsID) {
 
-            $arFilterDir = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'ACTIVE' => 'Y', 'UF_NEWS_LINK' => $arNewsID];
+            $arFilterDir = ['IBLOCK_ID' => $this->arParams['CATALOG_IBLOCK_ID'], 'ACTIVE' => 'Y', 'UF_NEWS_LINK' => $arNewsID];
             $arSelectDir = ['IBLOCK_ID', 'ID', 'NAME', 'UF_NEWS_LINK'];
             $resDir = CIBlockSection::GetList([], $arFilterDir, false, $arSelectDir);
             return $resDir;
 
         }
 
-        private function getProductElems($arParams, $arDirID) {
+        private function getProductElems($arDirID) {
 
 
-            $arFilterElem = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 'ACTIVE' => 'Y', 'SECTION_ID' => $arDirID];
+            $arFilterElem = ['IBLOCK_ID' => $this->arParams['CATALOG_IBLOCK_ID'], 'ACTIVE' => 'Y', 'SECTION_ID' => $arDirID];
             $arSelectElem = ['IBLOCK_ID', 'ID', 'NAME', 'PROPERTY_PRICE', 'PROPERTY_MATERIAL', 'PROPERTY_ARTNUMBER', 'IBLOCK_SECTION_ID'];
             $resElem = CIBlockElement::GetList([], $arFilterElem, false, false, $arSelectElem);
             return $resElem;
@@ -33,7 +33,7 @@
 
         private function getArResult() {
 
-                $resNews = $this->getNewsList($this->arParams);
+                $resNews = $this->getNewsList();
         
                 if (!$resNews) {
                     $this->AbortResultCache();
@@ -41,10 +41,14 @@
         
                 while ($newsData = $resNews->Fetch()) {
                     $arNewsID[] =  $newsData['ID'];
-                    $result[$newsData['ID']] = [$newsData['NAME'], $newsData['DATE_ACTIVE_FROM'], 'SECTIONS'=>[]];
+                    $result[$newsData['ID']] = [
+                                                'NEWS_NAME' => $newsData['NAME'], 
+                                                'NEWS_DATE' => $newsData['DATE_ACTIVE_FROM'], 
+                                                'DIRECTORY' => [], 'ELEMS' => []
+                                            ];
                 }
         
-                $resDir = $this->getProductSections($this->arParams, $arNewsID);
+                $resDir = $this->getProductSections($arNewsID);
 
                 if (!$resDir) {
                     $this->AbortResultCache();
@@ -52,49 +56,40 @@
         
                 while ($dirData = $resDir->Fetch()) {
                     $arDirID[] = $dirData['ID'];
-                    $arDirData[$dirData['ID']] = $dirData;
                     
+                    foreach ($dirData['UF_NEWS_LINK'] as $newsLink) {
+                        $result[$newsLink]['DIRECTORY'][$dirData['ID']] = $dirData;
+                    }
+
                 }
-        
-                $resElem = $this->getProductElems($this->arParams, $arDirID);
-        
+                
+                $resElem = $this->getProductElems($arDirID);
+                
                 if (!$resElem) {
                     $this->AbortResultCache();
                 }
-        
+                
+                $countElems = $resElem->SelectedRowsCount();
+                
                 while ($elemData = $resElem->Fetch()) {
-                    $arDirData[$elemData['IBLOCK_SECTION_ID']]['elems'][] = $elemData;
-                }
-        
-                foreach ($arDirData as $dir) {
-        
-                    foreach ($dir['UF_NEWS_LINK'] as $property) {
-                        $result[$property]['SECTIONS'][] = $dir;
+                    
+                    foreach ($result as $key => $news) {
+
+                        foreach ($news['DIRECTORY'] as $dir) {
+
+                            if ($elemData['IBLOCK_SECTION_ID'] == $dir['ID']) {
+                               $result[$key]['ELEMS'][] =  $elemData;
+                               
+                            }
+
+                        } 
+
                     }
         
                 }
 
+                $result['COUNT_ELEMS'] = $countElems;
                 return $result;
-
-        }
-
-        private function getCountElems($result) {
-
-            $count = 0;
-            
-            foreach ($result as $news) {
-
-                foreach ($news['SECTIONS'] as $section) {
-
-                    foreach ($section['elems'] as $elem) {
-                        $count++;
-                    }
-
-                }
-
-            }
-
-            return $count;
 
         }
 
@@ -104,11 +99,11 @@
 
             if ($this->StartResultCache()) {
                 $this->arResult = $this->getArResult();
-                $countElems = $this->getCountElems($this->arResult);
+                $this->SetResultCacheKeys(['COUNT_ELEMS']);
                 $this->IncludeComponentTemplate();
             }
 
-            $APPLICATION->SetTitle($countElems);
+            $APPLICATION->SetTitle($this->arResult['COUNT_ELEMS']);
             
         } 
     }
