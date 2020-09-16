@@ -2,17 +2,17 @@
    if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
     echo '<h3>';
-    echo $APPLICATION->ShowTitle(); 
+    echo $APPLICATION->ShowTitle(); //убрать глобальную переменную
     echo "
         </h3> 
         фильтр: <a href='http://980trainee.dev-bitrix.by/?F=Y'> 980trainee.dev-bitrix.by/?F=Y </a>
         <p> Каталог: <a href='http://980trainee.dev-bitrix.by'> 980trainee.dev-bitrix.by </a> </p> 
-        <ul>";
+        <ul>";//убрать абсолютные ссылки
     $i = 1;
 
     foreach ($arResult as $key => $classifier) {
 
-        if ($key == 'minMax') {
+        if ($key == 'minMax' || $key == 'NAV_STRING') {
             continue;
         }
 
@@ -35,5 +35,7 @@
         $elemData = '';
     }
 
+    echo '<p><b>Навигация:</b></p>';
+    echo $arResult['NAV_STRING']->NavPrint("раздел");
 ?>
 </ul>

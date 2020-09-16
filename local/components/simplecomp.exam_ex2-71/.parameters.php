@@ -20,6 +20,12 @@
                 'TYPE' => 'STRING',
                 'DEFAULT' => ""
             ],
+            'PAGINATION_COUNT_ELEM' => [
+                'PARENT' => 'BASE',
+                'NAME' => GetMessage('MY_COMPONENT_PAGINATION_COUNT_ELEM'),
+                'TYPE' => 'STRING',
+                'DEFAULT' => "3"
+            ],
             "DETAIL_URL" => CIBlockParameters::GetPathTemplateParam(
                 "DETAIL",
                 "DETAIL_URL",

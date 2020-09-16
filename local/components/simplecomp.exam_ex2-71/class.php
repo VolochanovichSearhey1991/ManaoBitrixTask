@@ -6,16 +6,20 @@
 
         private function getClassificatorList($arParams) {
 
+            $arNavParams = array(
+                'nPageSize'          => $arParams['PAGINATION_COUNT_ELEM'],
+                'bDescPageNumbering' => false,
+                'bShowAll'           => true,
+            ); 
             $arFilterCl = ['IBLOCK_ID' => $arParams['CLASSIFIER_IBLOCK_ID'], 'CHECK_PERMISSIONS' => 'Y'];
             $arSelectCl = ['IBLOCK_ID', 'ID', 'NAME'];
-            $resCl = CIBlockElement::GetList([], $arFilterCl, false, false, $arSelectCl);
+            $resCl = CIBlockElement::GetList([], $arFilterCl, false, $arNavParams, $arSelectCl);
             return $resCl;
 
         }
         
         private function getElemsList($arParams, $arClassifiersId, $additionalFilter = '') {
-
-
+           
             $arFilterEl = ['IBLOCK_ID' => $arParams['CATALOG_IBLOCK_ID'], 
             $additionalFilter, 
             'PROPERTY_FIRM.ID' => $arClassifiersId, 
@@ -49,16 +53,19 @@
             if (!$resCl) {
                 $this->AbortResultCache();
             }
-        
+            
+            $resCl->NavStart();
+
             while ($clData = $resCl->Fetch()) {
                 $arClassifiersId[] = $clData['ID'];// массив id всех классификаторов для передачи в запрос(получить все товары с привязками)
                 $result[$clData['ID']] = [$clData['NAME'], 'ELEMS' => []];
                 $count++;
             }
 
-            $additionalFilter = ['LOGIC' => 'OR', 
-            ['<=PROPERTY_PRICE' => '1700', '=PROPERTY_MATERIAL' => 'Дерево, ткань'],
-            ['<PROPERTY_PRICE' => '1500', '=PROPERTY_MATERIAL' => 'Металл, пластик']
+            $additionalFilter = [
+                'LOGIC' => 'OR', 
+                ['<=PROPERTY_PRICE' => '1700', '=PROPERTY_MATERIAL' => 'Дерево, ткань'],
+                ['<PROPERTY_PRICE' => '1500', '=PROPERTY_MATERIAL' => 'Металл, пластик']
             ];
 
             if (!empty($filter)) {
@@ -70,7 +77,7 @@
             if (!$resEl) {
                 $this->AbortResultCache();
             }
-        
+
             while ($elData = $resEl->GetNextElement()) {
                 $bufAr = $elData->GetFields();
                 $this->getEditLinks($bufAr);
@@ -78,7 +85,7 @@
             }
 
             $result['minMax'] = $this->getMinMaxPrice($result);
-
+            $result['NAV_STRING'] = $resCl;
             return $result;
 
         }
@@ -87,7 +94,11 @@
 
             $count = 0;
 
-            foreach ($arResult as $classifier) {
+            foreach ($arResult as $key => $classifier) {
+
+                if ($key == 'NAV_STRING') {
+                    continue;
+                }
 
                 foreach($classifier['ELEMS'] as $elem) {
                     $count++;
@@ -151,7 +162,7 @@
             $request = Context::getCurrent()->getRequest();
             $filter = $request->getQuery("F");
 
-            if ($this->StartResultCache(false, $USER->GetGroups() . $filter) ) {
+            if ($this->StartResultCache(false, $USER->GetGroups(), $filter, $this->navigation) ) {
                
                 if (!empty($filter)) {
                     $this->AbortResultCache();
@@ -160,10 +171,7 @@
                 $this->arResult = $this->getArResult($filter);
                 $countElems = $this->getCountElems($this->arResult);
                 $this->IncludeComponentTemplate();
-                //echo '<pre>'; print_r($this->arResult); echo '</pre>'; 
-                
             }
-
             $this->setAdditionalMenu($this->arParams['CATALOG_IBLOCK_ID']);
             $APPLICATION->SetTitle('Разделов: ' . $countElems);
             
