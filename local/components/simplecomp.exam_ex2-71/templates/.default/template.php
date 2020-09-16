@@ -35,5 +35,10 @@
         $elemData = '';
     }
 
+    $this->SetViewTarget('minMaxPrice');
+        echo $outputLine = '---Текст из компонента ---</br> минимальная цена: ' . 
+                $arResult['minMax']['min'] . '</br>максимальная цена: ' .  
+                    $arResult['minMax']['max'];
+    $this->EndViewTarget();
 ?>
 </ul>
