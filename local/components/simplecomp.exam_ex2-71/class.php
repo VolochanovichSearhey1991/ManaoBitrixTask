@@ -54,8 +54,6 @@
                 $this->AbortResultCache();
             }
             
-            $resCl->NavStart();
-
             while ($clData = $resCl->Fetch()) {
                 $arClassifiersId[] = $clData['ID'];// массив id всех классификаторов для передачи в запрос(получить все товары с привязками)
                 $result[$clData['ID']] = [$clData['NAME'], 'ELEMS' => []];
@@ -85,7 +83,8 @@
             }
 
             $result['minMax'] = $this->getMinMaxPrice($result);
-            $result['NAV_STRING'] = $resCl;
+            $result["NAV_STRING"] = $resCl->GetPageNavStringEx($navComponentObject, "");
+            $result['count'] = $this->getCountElems($result);
             return $result;
 
         }
@@ -154,26 +153,35 @@
 
         }
 
+        private function getParamsForNav() {
+
+            $request = Context::getCurrent()->getRequest();
+            $navParam = 'page-' . $request->getQuery("PAGEN_1") . 
+                        'showall-' . $request->getQuery("SHOWALL_1");
+            return $navParam;
+
+        } 
+
         public function executeComponent() {
             
             GLOBAL $USER; 
             GLOBAL $APPLICATION;
-
             $request = Context::getCurrent()->getRequest();
+
             $filter = $request->getQuery("F");
-
-            if ($this->StartResultCache(false, $USER->GetGroups(), $filter, $this->navigation) ) {
-               
-                if (!empty($filter)) {
-                    $this->AbortResultCache();
-                }
-
+            $navParams = $this->getParamsForNav();
+        
+            if ($this->StartResultCache(false, $USER->GetGroups() . $filter . $navParams) ) {
+                
                 $this->arResult = $this->getArResult($filter);
-                $countElems = $this->getCountElems($this->arResult);
+                $this->SetResultCacheKeys([
+                    "count"
+                ]);
                 $this->IncludeComponentTemplate();
             }
+
             $this->setAdditionalMenu($this->arParams['CATALOG_IBLOCK_ID']);
-            $APPLICATION->SetTitle('Разделов: ' . $countElems);
+            $APPLICATION->SetTitle('Разделов: ' . $arResult['count']);
             
         }
         

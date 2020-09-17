@@ -2,17 +2,17 @@
    if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
     echo '<h3>';
-    echo $APPLICATION->ShowTitle(); //убрать глобальную переменную
+    echo 'Разделов: ' . $arResult['count']; 
     echo "
         </h3> 
-        фильтр: <a href='http://980trainee.dev-bitrix.by/?F=Y'> 980trainee.dev-bitrix.by/?F=Y </a>
-        <p> Каталог: <a href='http://980trainee.dev-bitrix.by'> 980trainee.dev-bitrix.by </a> </p> 
+        фильтр: <a href='" . $APPLICATION->GetCurPage() . "?F=Y'> " . SITE_SERVER_NAME . $APPLICATION->GetCurPage(true) . "?F=Y </a>
+        <p> Каталог: <a href='" . $APPLICATION->GetCurPage() . "'> " . SITE_SERVER_NAME . $APPLICATION->GetCurPage(true) . " </a> </p> 
         <ul>";//убрать абсолютные ссылки
     $i = 1;
 
     foreach ($arResult as $key => $classifier) {
 
-        if ($key == 'minMax' || $key == 'NAV_STRING') {
+        if ($key == 'minMax' || $key == 'NAV_STRING' || $key == 'count') {
             continue;
         }
 
@@ -36,6 +36,6 @@
     }
 
     echo '<p><b>Навигация:</b></p>';
-    echo $arResult['NAV_STRING']->NavPrint("раздел");
+    echo $arResult['NAV_STRING'];
 ?>
 </ul>

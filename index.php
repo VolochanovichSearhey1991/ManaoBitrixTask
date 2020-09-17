@@ -12,7 +12,7 @@ $APPLICATION->SetTitle("Интернет-магазин \"Одежда\"");
 		"CLASSIFIER_IBLOCK_ID" => "19",
 		"DETAILED_LINK_TEMPLATE" => "/detailpage.php",
 		"DETAIL_URL" => "catalog_exam/#SECTION_ID#/#ID#",
-		"PAGINATION_COUNT_ELEM" => "1",
+		"PAGINATION_COUNT_ELEM" => "2",
 		"PROPERTY_ID" => "FIRM"
 	)
 );?><br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
