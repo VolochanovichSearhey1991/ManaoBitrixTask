@@ -6,4 +6,12 @@ $APPLICATION->SetTitle("time_control");
  <br>
  размер кэша "по умолчанию" для компонента 46кб<br>
  размер кэша "только с необходимыми данными" для компонента 16кб<br>
-разница: 30кб<br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+ разница: 30кб<br>
+ <br>
+ ----------------------------------------------------------------------<br>
+ задание ex2-10<br>
+ <br>
+ самая ресурсоемкая&nbsp;страница:&nbsp;<a href="http://980trainee.dev-bitrix.by/bitrix/admin/perfmon_hit_list.php?lang=ru&set_filter=Y&find_script_name=%2Fcatalog%2Findex.php">/catalog/index.php</a>&nbsp;<br>
+ доля: 47.47%<br>
+ <br>
+ компонент:&nbsp;bitrix:catalog время:&nbsp;0.0101 с<br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
