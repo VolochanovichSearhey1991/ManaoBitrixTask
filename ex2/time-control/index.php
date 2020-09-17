@@ -14,4 +14,12 @@ $APPLICATION->SetTitle("time_control");
  самая ресурсоемкая&nbsp;страница:&nbsp;<a href="http://980trainee.dev-bitrix.by/bitrix/admin/perfmon_hit_list.php?lang=ru&set_filter=Y&find_script_name=%2Fcatalog%2Findex.php">/catalog/index.php</a>&nbsp;<br>
  доля: 47.47%<br>
  <br>
- компонент:&nbsp;bitrix:catalog время:&nbsp;0.0101 с<br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+ компонент:&nbsp;bitrix:catalog время:&nbsp;0.0101 с<br>
+ <br>
+ ----------------------------------------------------------------------<br>
+ задание ex2-11<br>
+ <br>
+ самая ресурсоемкая&nbsp;страница:&nbsp;<a href="http://980trainee.dev-bitrix.by/bitrix/admin/perfmon_hit_list.php?lang=ru&set_filter=Y&find_script_name=%2Fcatalog%2Findex.php">/catalog/index.php</a>&nbsp;<br>
+ доля: 54.48%<br>
+ <br>
+ компонент:&nbsp;bitrix:catalog запросов - 4<br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
