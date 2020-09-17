@@ -2,12 +2,12 @@
    if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
     echo '<h3>';
-    echo 'Разделов: ' . $arResult['count']; 
-    echo "
-        </h3> 
-        фильтр: <a href='" . $APPLICATION->GetCurPage() . "?F=Y'> " . SITE_SERVER_NAME . $APPLICATION->GetCurPage(true) . "?F=Y </a>
+    echo 'Разделов: ' . $arResult['count'] . "</h3> </br>"; 
+    echo time() . "</br>";
+    echo "фильтр: <a href='" . $APPLICATION->GetCurPage() . "?F=Y'> 
+        " . SITE_SERVER_NAME . $APPLICATION->GetCurPage(true) . "?F=Y </a>
         <p> Каталог: <a href='" . $APPLICATION->GetCurPage() . "'> " . SITE_SERVER_NAME . $APPLICATION->GetCurPage(true) . " </a> </p> 
-        <ul>";//убрать абсолютные ссылки
+        <ul>";
     $i = 1;
 
     foreach ($arResult as $key => $classifier) {

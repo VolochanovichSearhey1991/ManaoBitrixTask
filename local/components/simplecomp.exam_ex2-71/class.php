@@ -166,6 +166,7 @@
             
             GLOBAL $USER; 
             GLOBAL $APPLICATION;
+            GLOBAL $CACHE_MANAGER;
             $request = Context::getCurrent()->getRequest();
 
             $filter = $request->getQuery("F");
@@ -174,6 +175,8 @@
             if ($this->StartResultCache(false, $USER->GetGroups() . $filter . $navParams) ) {
                 
                 $this->arResult = $this->getArResult($filter);
+                $iblockDependCache = '17';
+                $CACHE_MANAGER->RegisterTag('iblock_id_' . $iblockDependCache);
                 $this->SetResultCacheKeys([
                     "count"
                 ]);
