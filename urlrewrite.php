@@ -168,4 +168,12 @@ $arUrlRewrite=array (
     'PATH' => '/news/index.php',
     'SORT' => 100,
   ),
+  22 => 
+  array (
+    'CONDITION' => '#^/#',
+    'RULE' => '',
+    'ID' => 'photo_ex2-25',
+    'PATH' => '/index.php',
+    'SORT' => 100,
+  ),
 );
