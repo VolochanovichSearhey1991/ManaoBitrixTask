@@ -48,12 +48,28 @@ $arUrlRewrite=array (
     'PATH' => '/desktop_app/router.php',
     'SORT' => 100,
   ),
+  23 => 
+  array (
+    'CONDITION' => '#^/ex2/site2products/#',
+    'RULE' => '',
+    'ID' => 'bitrix:catalog',
+    'PATH' => '/ex2/site2products/index.php',
+    'SORT' => 100,
+  ),
   14 => 
   array (
     'CONDITION' => '#^/site2nationalnews/#',
     'RULE' => '',
     'ID' => 'bitrix:news',
     'PATH' => '/site2nationalnews/index.php',
+    'SORT' => 100,
+  ),
+  22 => 
+  array (
+    'CONDITION' => '#^/ex2/site2services/#',
+    'RULE' => '',
+    'ID' => 'bitrix:catalog',
+    'PATH' => '/ex2/site2services/index.php',
     'SORT' => 100,
   ),
   17 => 
@@ -86,6 +102,14 @@ $arUrlRewrite=array (
     'RULE' => '',
     'ID' => 'bitrix:sale.personal.order',
     'PATH' => '/personal/order/index.php',
+    'SORT' => 100,
+  ),
+  24 => 
+  array (
+    'CONDITION' => '#^/ex2/site2news/#',
+    'RULE' => '',
+    'ID' => 'bitrix:news',
+    'PATH' => '/ex2/site2news/index.php',
     'SORT' => 100,
   ),
   13 => 

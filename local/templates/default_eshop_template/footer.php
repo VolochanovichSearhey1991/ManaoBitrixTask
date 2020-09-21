@@ -2,8 +2,25 @@
 				</div><!--end .bx-content -->
 
 				<!-- region Sidebar -->
+				
 				<?if (!$needSidebar):?>
 					<div class="sidebar col-md-3 col-sm-4">
+						<div class="langswitcher">
+						<?$APPLICATION->IncludeComponent(
+	"bitrix:main.site.selector", 
+	"customList", 
+	array(
+		"CACHE_TIME" => "3600",
+		"CACHE_TYPE" => "A",
+		"SITE_LIST" => array(
+			0 => "s1",
+			1 => "s2",
+		),
+		"COMPONENT_TEMPLATE" => "customList"
+	),
+	false
+);?>
+						</div>
 						<?$APPLICATION->IncludeComponent(
 							"bitrix:main.include",
 							"",
@@ -15,9 +32,10 @@
 							),
 							false,
 							Array('HIDE_ICONS' => 'Y')
-						);?>
+						);?>			
 					</div>
 				<?endif?>
+
 				<!--endregion -->
 
 			</div><!--end row-->
@@ -38,7 +56,9 @@
 
 	<footer class="bx-footer">
 		<div class="bx-footer-section bx-footer-bg">
+
 			<div class="container">
+
 				<?$APPLICATION->IncludeComponent(
 					"bitrix:main.include",
 					"",
@@ -53,6 +73,7 @@
 				);?>
 			</div>
 		</div>
+
 		<div class="bx-footer-section py-5 bg-dark">
 			<div class="container">
 				<div class="row">

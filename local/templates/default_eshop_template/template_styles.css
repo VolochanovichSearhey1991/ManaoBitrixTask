@@ -20,7 +20,9 @@
 	--theme-b-bg-primary-disabled: #daa53e;
 	--theme-b-bd-primary-disabled: #b7853b;
 }
-
+.langswitcher {
+	margin-bottom: 50px;
+}
 .bx-blue,
 .bx-theme-blue {
 	--primary: #0083d1;
