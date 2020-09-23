@@ -12,7 +12,6 @@
 /** @var CBitrixComponent $component */
 use Bitrix\Main\Application;
 use \Bitrix\Main\Web\Uri;
-use Bitrix\Main\Context;
 CAjax::Init();
 $this->setFrameMode(true);
 $this->addExternalJS('/local/lib/js/ajax.js');
@@ -43,19 +42,28 @@ $this->addExternalJS('/local/lib/js/ajax.js');
 				$request = Application::getInstance()->getContext()->getRequest();
 				$uriString = $request->getRequestUri();
 				$uri = new Uri($uriString);
-				$uri->addParams(array("complaint" => "Y", "COMPLAINT_ID" => $arResult['ID']));
+				$uri->addParams(array("complaint" => "Y"));
 				$redirect = $uri->getUri();
-				echo "<p id='output'> <a href=" . $redirect . ">Пожаловаться на новость</a> </p>";
+				echo "<p> <a href=" . $redirect . ">Пожаловаться на новость</a> </p>";
+				echo '<p>' . $arParams['OUTPUT_MESS'] . '</p>';
 			}
 				
 		?>
 
 	<?if ($arParams['AJAX_COMPLAINT'] == 'Y'):?>
+
+		<?
+			$request = Application::getInstance()->getContext()->getRequest();
+			$uriString = $request->getRequestUri();
+			$uri = new Uri($uriString);
+			$redirect = $uri->getUri();	
+		?>
+
 		<p id='output'><a href='#' id='complaintLink'>Пожаловаться на новость</a></p>
 		<script>
 		let complaint = document.getElementById('complaintLink');
 		let output = document.getElementById('output');
-		complaint.addEventListener( "click" , () => sendWithAjax('<?=$arResult['ID'];?>', output, '<?=$templateFolder;?>'));
+		complaint.addEventListener("click" , () => sendWithAjax(output, '<?=$redirect;?>'));
 		</script>
 	<?endif;?>
 

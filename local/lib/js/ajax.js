@@ -1,7 +1,7 @@
-function sendWithAjax(thisId, output, templatePath) {
+function sendWithAjax(output, templatePath) {
     BX.ajax({
-        url: templatePath + '/component_epilog.php',
-        data: {'complaint':'Y', 'id':thisId},
+        url: templatePath,
+        data: {'complaint':'Y'},
         method: 'POST',
         dataType: 'html',
         timeout: 30,

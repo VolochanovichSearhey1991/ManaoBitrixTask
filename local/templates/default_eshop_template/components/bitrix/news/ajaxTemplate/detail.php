@@ -10,8 +10,70 @@
 /** @var string $templateFolder */
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
+
+use \Bitrix\Main\Security\Random;
+use Bitrix\Main\Context;
 $this->setFrameMode(true);
 ?>
+
+<?
+
+$request = Context::getCurrent()->getRequest();
+$getComplaint = $request->getQuery("complaint");
+$postComplaint = $request->getPost("complaint"); 
+
+if ((isset($getComplaint) && $getComplaint == 'Y') || ((isset($postComplaint) && $postComplaint == 'Y'))) {
+
+		global $USER;
+		$el = new CIBlockElement;
+		$objDateTime = new DateTime();
+		$activeFrom = $objDateTime->format('d.m.Y');
+		$iblock_id = 20;
+		$randLenght = 20;
+			
+		if ($USER->IsAuthorized()) {
+			$userData = 'ID - ' . $USER->GetID() . ', login - ' . $USER->GetLogin() . ', Name - ' . $USER->GetFullName();
+		} else {
+			$userData = 'Не авторизован';
+		}
+	
+        $propertyData = [
+            'USER' => $userData,
+            'NEWS' => $arResult['VARIABLES']['ELEMENT_ID'],
+        ];
+        $elemDate = [
+            'IBLOCK_SECTION_ID' => false,
+            'IBLOCK_ID' => $iblock_id,
+            'PROPERTY_VALUES' => $propertyData,
+            'NAME' => Random::getString($randLenght),
+            'ACTIVE' => 'Y',
+            'ACTIVE_FROM' => $activeFrom,
+		];
+
+		if ((isset($postComplaint) && $postComplaint == 'Y')) {	
+			$APPLICATION->RestartBuffer();
+
+			if ($newItemId = $el->Add($elemDate)) {
+				echo 'Ваше мнение учтено, №' . $newItemId;
+			} else {
+				echo 'Ошибка';
+			}  
+			
+			die();
+		} elseif (isset($getComplaint) && $getComplaint == 'Y') {
+
+			if ($newItemId = $el->Add($elemDate)) {
+				$arParams['OUTPUT_MESS'] =  'Ваше мнение учтено, №' . $newItemId;
+			} else {
+				$arParams['OUTPUT_MESS'] =  'Ошибка';
+			}
+
+		}	
+		
+}
+
+?>
+
 <?$ElementID = $APPLICATION->IncludeComponent(
 	"bitrix:news.detail",
 	"",
@@ -67,9 +129,11 @@ $this->setFrameMode(true);
 		'STRICT_SECTION_CHECK' => (isset($arParams['STRICT_SECTION_CHECK']) ? $arParams['STRICT_SECTION_CHECK'] : ''),
 		'AJAX_COMPLAINT' => $arParams['AJAX_COMPLAINT'],
 		'SEF_MODE' => $arParams['SEF_MODE'],
+		'OUTPUT_MESS' => $arParams['OUTPUT_MESS'],
 	),
 	$component
 );?>
+
 <p><a href="<?=$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"]?>"><?=GetMessage("T_NEWS_DETAIL_BACK")?></a></p>
 <?if($arParams["USE_RATING"]=="Y" && $ElementID):?>
 <?$APPLICATION->IncludeComponent(
@@ -169,3 +233,4 @@ $this->setFrameMode(true);
 	$component
 );?>
 <?endif?>
+

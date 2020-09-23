@@ -8,7 +8,7 @@ $APPLICATION->SetTitle("Интернет-магазин \"Одежда\"");
 	Array(
 		"ADD_ELEMENT_CHAIN" => "N",
 		"ADD_SECTIONS_CHAIN" => "Y",
-		"AJAX_COMPLAINT" => "N",
+		"AJAX_COMPLAINT" => "Y",
 		"AJAX_MODE" => "N",
 		"AJAX_OPTION_ADDITIONAL" => "",
 		"AJAX_OPTION_HISTORY" => "N",
